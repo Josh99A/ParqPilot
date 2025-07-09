@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'splash.dart'; 
 import 'login_screen.dart';
 
 void main() {
@@ -11,13 +10,9 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'ParqPilot',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: const Splash(),
+      home: LoginScreen(), // Start directly from login screen
     );
   }
 }
