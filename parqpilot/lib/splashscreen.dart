@@ -1,5 +1,6 @@
 import 'dart:ui'; 
 import 'package:flutter/material.dart';
+import 'login_screen.dart';
 
 class SplashScreen extends StatelessWidget {
   const SplashScreen({super.key});
@@ -11,23 +12,20 @@ class SplashScreen extends StatelessWidget {
     return Scaffold(
       body: Stack(
         children: [
-          // Background image
           Positioned.fill(
             child: Image.asset(
               'assets/car1.png.jpg',
               fit: BoxFit.cover,
             ),
           ),
-          // Blur effect
           Positioned.fill(
             child: BackdropFilter(
               filter: ImageFilter.blur(sigmaX: 8, sigmaY: 8), 
               child: Container(
-                color: Colors.black.withOpacity(0.2), // optional dark overlay
+                color: Colors.black.withOpacity(0.2),
               ),
             ),
           ),
-          // Two icons at top left and right
           Positioned(
             top: 40,
             left: 24,
@@ -38,7 +36,6 @@ class SplashScreen extends StatelessWidget {
             right: 24,
             child: Icon(Icons.account_circle, color: Colors.white, size: 32),
           ),
-          // Overlay with content
           Positioned.fill(
             child: SafeArea(
               child: Padding(
@@ -47,22 +44,17 @@ class SplashScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    // Main Text
-                    Center(
-                      child: const Text(
+                    const Center(
+                      child: Text(
                         'Find yourself a\nparking slot,\neffortlessly',
                         style: TextStyle(
                           fontSize: 42,
                           fontWeight: FontWeight.w700,
                           color: Colors.white,
-                          //height: 1.3,
                         ),
-                        textAlign: TextAlign.center, 
-                      
+                        textAlign: TextAlign.center,
                       ),
                     ),
-                    
-                    // Car Image
                     Center(
                       child: Image.asset(
                         'assets/car2.png.png',
@@ -70,23 +62,26 @@ class SplashScreen extends StatelessWidget {
                         fit: BoxFit.contain,
                       ),
                     ),
-                   // const Spacer(),
-                    // Get Started Button
                     Center(
                       child: ElevatedButton.icon(
                         onPressed: () {
-                          // Navigate to next screen
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const LoginScreen(),
+                            ),
+                          );
                         },
                         icon: const Icon(Icons.directions_car, color: Colors.white),
                         label: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            Text(
+                            const Text(
                               "Get Started",
                               style: TextStyle(fontSize: 28, color: Colors.white),
                             ),
-                            SizedBox(width: 8),
-                            Icon(Icons.arrow_forward_ios, size: 16, color: Colors.white),
+                            const SizedBox(width: 8),
+                            const Icon(Icons.arrow_forward_ios, size: 16, color: Colors.white),
                           ],
                         ),
                         style: ElevatedButton.styleFrom(
