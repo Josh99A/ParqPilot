@@ -7,7 +7,7 @@ import 'profile_screen.dart';
 import 'change_password_screen.dart';
 
 class MyAccountScreen extends StatefulWidget {
-  const MyAccountScreen({Key? key}) : super(key: key);
+  const MyAccountScreen({super.key});
 
   @override
   State<MyAccountScreen> createState() => _MyAccountScreenState();

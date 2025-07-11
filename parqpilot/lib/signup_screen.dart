@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:parqpilot/change_password_screen.dart';
+// 'package:parqpilot/change_password_screen.dart';
 import 'package:parqpilot/home_screen.dart';
 
 
 class SignUpScreen extends StatelessWidget {
-  const SignUpScreen({Key? key}) : super(key: key);
+  const SignUpScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
