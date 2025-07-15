@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Launching ParqPilot...</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            color: white;
+        }
+        .launcher {
+            text-align: center;
+            padding: 2rem;
+        }
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-top: 4px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        h1 {
+            margin-bottom: 1rem;
+        }
+        p {
+            opacity: 0.8;
+        }
+    </style>
+</head>
+<body>
+    <div class="launcher">
+        <div class="spinner"></div>
+        <h1>Launching ParqPilot</h1>
+        <p>Opening your smart parking solution...</p>
+    </div>
+
+    <script>
+        // Check if main site is already open
+        if (sessionStorage.getItem('parqpilot_open')) {
+            // Main site is already open, redirect to it
+            window.location.href = 'index.html';
+        } else {
+            // Mark as open and launch
+            sessionStorage.setItem('parqpilot_open', 'true');
+            
+            // Open main site in same window
+            setTimeout(() => {
+                window.location.replace('index.html');
+            }, 1500);
+        }
+    </script>
+</body>
+</html> 
