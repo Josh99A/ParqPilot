@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "937029182282",
+    "project_id": "parqpilot-2c029",
+    "storage_bucket": "parqpilot-2c029.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:937029182282:android:6736d66e6e0f341e9fd7b3",
+        "android_client_info": {
+          "package_name": "com.example.parqpilot"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC4kwGCyoVorFYgMPW_22cZ7koZbn4oq2k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
