@@ -12,6 +12,7 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   String fullName = "Loading...";
   String phoneNumber = "Loading...";
+  String email = "Loading...";
 
   @override
   void initState() {
@@ -22,10 +23,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Future<void> fetchUserData() async {
     try {
       final uid = FirebaseAuth.instance.currentUser?.uid;
+      final userEmail = FirebaseAuth.instance.currentUser?.email ?? "No Email";
+
       if (uid == null) {
         setState(() {
           fullName = "User not logged in";
           phoneNumber = "-";
+          email = userEmail;
         });
         return;
       }
@@ -36,17 +40,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
         setState(() {
           fullName = data['fullName'] ?? 'No Name';
           phoneNumber = data['phoneNumber'] ?? 'No Phone';
+          email = userEmail;
         });
       } else {
         setState(() {
           fullName = "No data found";
           phoneNumber = "-";
+          email = userEmail;
         });
       }
     } catch (e) {
       setState(() {
         fullName = "Error loading data";
         phoneNumber = "-";
+        email = "N/A";
       });
     }
   }
@@ -57,34 +64,58 @@ class _ProfileScreenState extends State<ProfileScreen> {
       backgroundColor: const Color.fromARGB(255, 2, 9, 77),
       appBar: AppBar(
         backgroundColor: const Color.fromARGB(255, 165, 171, 235),
-        title: const Text("Profile"),
+        title: const Text("My Profile"),
+        centerTitle: true,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.pop(context);
-          },
+          onPressed: () => Navigator.pop(context),
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(24),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text("Full Name", style: TextStyle(color: Colors.white70, fontSize: 16)),
-            const SizedBox(height: 6),
-            Row(
-              children: [
-                const Icon(Icons.person, color: Colors.white),
-                const SizedBox(width: 10),
-                Text(fullName, style: const TextStyle(color: Colors.white, fontSize: 20)),
-              ],
-            ),
-            const SizedBox(height: 30),
-            const Text("Phone Number", style: TextStyle(color: Colors.white70, fontSize: 16)),
-            const SizedBox(height: 6),
-            Text(phoneNumber, style: const TextStyle(color: Colors.white, fontSize: 20)),
-          ],
+      body: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(24),
+          child: Column(
+            children: [
+              const CircleAvatar(
+                radius: 50,
+                backgroundColor: Colors.white,
+                child: Icon(Icons.person, size: 60, color: Color.fromARGB(255, 2, 9, 77)),
+              ),
+              const SizedBox(height: 20),
+              Card(
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                color: Colors.white.withOpacity(0.1),
+                child: Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      buildProfileRow("Full Name", fullName),
+                      const Divider(color: Colors.white24),
+                      buildProfileRow("Phone Number", phoneNumber),
+                      const Divider(color: Colors.white24),
+                      buildProfileRow("Email", email),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
+      ),
+    );
+  }
+
+  Widget buildProfileRow(String label, String value) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 6),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text("$label: ",
+              style: const TextStyle(color: Colors.white70, fontWeight: FontWeight.bold)),
+          Expanded(child: Text(value, style: const TextStyle(color: Colors.white))),
+        ],
       ),
     );
   }
