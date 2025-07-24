@@ -1,16 +1,13 @@
-# parqpilot
+# ParqPilot-Smart Parking System
+ParqPilot is a real-time smart parking system to help drivers quickly identify available and unavailable parking slots.combining ultrasonic sensors,ESP32-CAM microcontrollers  and Firebaseto deliver live slot updates on a web-based dashboard
 
-A new Flutter project.
 
-## Getting Started
+## Overview
+In many urban areas,drivers struggle to find open parking spaces,leading to time loss and traffic congestion .ParqPilot addresses this challenge by showing the availability of each parking slot in real-time through a visual dashboard and LED indicators on-site.The system is easy to install and scalable for different parking lot sizes.
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## System Architecture
+[Ultrasonic Sensors (HC-SR04)]
+↓
+[ESP32-CAM] -- Wi-Fi --> [Firebase Realtime Database] --> [Web Dashboard]
+↓
+[LED Indicators]
