@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-//import '../ParqPilot/lib/home_screen.dart';
+import 'package:parqpilot/home_screen.dart';
 import 'activity_screen.dart';
-// import 'profile_screen.dart';
-
 import 'profile_screen.dart';
 import 'change_password_screen.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class MyAccountScreen extends StatefulWidget {
   const MyAccountScreen({Key? key}) : super(key: key);
@@ -28,7 +27,7 @@ class _MyAccountScreenState extends State<MyAccountScreen> {
     if (index == 0) {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const ProfileScreen()),
+        MaterialPageRoute(builder: (context) => const HomeScreen()),
       );
     } else if (index == 1) {
       Navigator.pushReplacement(
@@ -36,6 +35,84 @@ class _MyAccountScreenState extends State<MyAccountScreen> {
         MaterialPageRoute(builder: (context) => const ActivityScreen()),
       );
     }
+  }
+
+  Future<void> _launchWhatsApp() async {
+    final whatsappNumber = "256707707827";
+    final whatsappUri = Uri.parse(
+        "intent://send?phone=$whatsappNumber&text=Hello#Intent;package=com.whatsapp;scheme=smsto;end");
+
+    if (await canLaunchUrl(whatsappUri)) {
+      await launchUrl(whatsappUri, mode: LaunchMode.externalApplication);
+    } else {
+      _showWhatsAppWarning();
+    }
+  }
+
+  Future<void> _launchEmail() async {
+    try {
+      final emailUri = Uri(
+        scheme: 'mailto',
+        path: 'kuteesa.mercylina10@gmail.com',
+        query: Uri.encodeFull('subject=Support&body=Hello'),
+      );
+      if (await canLaunchUrl(emailUri)) {
+        await launchUrl(emailUri, mode: LaunchMode.externalApplication);
+      } else {
+        _showEmailWarning();
+      }
+    } catch (e) {
+      _showEmailWarning();
+    }
+  }
+
+  Future<void> _launchPhoneCall() async {
+    final phoneUri = Uri.parse("tel:+256707707827");
+    if (await canLaunchUrl(phoneUri)) {
+      await launchUrl(phoneUri, mode: LaunchMode.externalApplication);
+    } else {
+      _showError("Could not make a phone call");
+    }
+  }
+
+  void _showError(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(message)),
+    );
+  }
+
+  void _showEmailWarning() {
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: const Text("Email app not found"),
+        content: const Text(
+          "Please install an email app like Gmail or Outlook to send an email.",
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text("OK"),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showWhatsAppWarning() {
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: const Text("WhatsApp not found"),
+        content: const Text("Please install WhatsApp to use this feature."),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text("OK"),
+          ),
+        ],
+      ),
+    );
   }
 
   @override
@@ -61,37 +138,48 @@ class _MyAccountScreenState extends State<MyAccountScreen> {
         child: ListView(
           padding: const EdgeInsets.all(16),
           children: [
-            _buildListTile(title: "Profile", icon: Icons.person, onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const ProfileScreen()),
-              );
-            }),
+            _buildListTile(
+              title: "Profile",
+              icon: Icons.person,
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const ProfileScreen()),
+                );
+              },
+            ),
             const SizedBox(height: 40),
-            _buildListTile(title: "Change Password", icon: Icons.lock, onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const ChangePasswordScreen()),
-              );
-            }),
+            _buildListTile(
+              title: "Change Password",
+              icon: Icons.lock,
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const ChangePasswordScreen()),
+                );
+              },
+            ),
             const SizedBox(height: 40),
             _buildExpandableTile(
               title: "Contact Us",
               icon: Icons.support_agent,
               isExpanded: _isContactExpanded,
               onTap: () => setState(() => _isContactExpanded = !_isContactExpanded),
-              children: const [
+              children: [
                 ListTile(
-                  leading: Icon(Icons.message_rounded, color: Colors.white),
-                  title: Text("WhatsApp", style: TextStyle(color: Colors.white)),
+                  leading: const Icon(Icons.message_rounded, color: Colors.white),
+                  title: const Text("WhatsApp", style: TextStyle(color: Colors.white)),
+                  onTap: _launchWhatsApp,
                 ),
                 ListTile(
-                  leading: Icon(Icons.email, color: Colors.white),
-                  title: Text("Email", style: TextStyle(color: Colors.white)),
+                  leading: const Icon(Icons.email, color: Colors.white),
+                  title: const Text("Email", style: TextStyle(color: Colors.white)),
+                  onTap: _launchEmail,
                 ),
                 ListTile(
-                  leading: Icon(Icons.phone, color: Colors.white),
-                  title: Text("Call", style: TextStyle(color: Colors.white)),
+                  leading: const Icon(Icons.phone, color: Colors.white),
+                  title: const Text("Call", style: TextStyle(color: Colors.white)),
+                  onTap: _launchPhoneCall,
                 ),
               ],
             ),
@@ -129,7 +217,11 @@ class _MyAccountScreenState extends State<MyAccountScreen> {
     );
   }
 
-  Widget _buildListTile({required String title, required IconData icon, required VoidCallback onTap}) {
+  Widget _buildListTile({
+    required String title,
+    required IconData icon,
+    required VoidCallback onTap,
+  }) {
     return Container(
       decoration: BoxDecoration(
         color: Colors.white24,

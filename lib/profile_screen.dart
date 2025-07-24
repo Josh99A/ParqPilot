@@ -34,12 +34,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
         return;
       }
 
-      final doc = await FirebaseFirestore.instance.collection('users').doc(uid).get();
+      final doc = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(uid)
+          .get();
       final data = doc.data();
       if (data != null) {
         setState(() {
-          fullName = data['fullName'] ?? 'No Name';
-          phoneNumber = data['phoneNumber'] ?? 'No Phone';
+          fullName = data['username'] ?? 'No Name';
           email = userEmail;
         });
       } else {
@@ -79,11 +81,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
               const CircleAvatar(
                 radius: 50,
                 backgroundColor: Colors.white,
-                child: Icon(Icons.person, size: 60, color: Color.fromARGB(255, 2, 9, 77)),
+                child: Icon(
+                  Icons.person,
+                  size: 60,
+                  color: Color.fromARGB(255, 2, 9, 77),
+                ),
               ),
               const SizedBox(height: 20),
               Card(
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
+                ),
                 color: Colors.white.withOpacity(0.1),
                 child: Padding(
                   padding: const EdgeInsets.all(20),
@@ -91,8 +99,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       buildProfileRow("Full Name", fullName),
-                      const Divider(color: Colors.white24),
-                      buildProfileRow("Phone Number", phoneNumber),
+                    
+                      
                       const Divider(color: Colors.white24),
                       buildProfileRow("Email", email),
                     ],
@@ -112,9 +120,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text("$label: ",
-              style: const TextStyle(color: Colors.white70, fontWeight: FontWeight.bold)),
-          Expanded(child: Text(value, style: const TextStyle(color: Colors.white))),
+          Text(
+            "$label: ",
+            style: const TextStyle(
+              color: Colors.white70,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          Expanded(
+            child: Text(value, style: const TextStyle(color: Colors.white)),
+          ),
         ],
       ),
     );

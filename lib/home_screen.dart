@@ -117,6 +117,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
                   return ListView.builder(
                     padding: const EdgeInsets.symmetric(horizontal: 24),
+                    
                     itemCount: slots.length,
                     itemBuilder: (context, index) {
                       final slotKey = slots[index].key.toString();

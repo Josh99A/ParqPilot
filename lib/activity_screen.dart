@@ -38,10 +38,7 @@ class _ActivityScreenState extends State<ActivityScreen> {
   @override
   Widget build(BuildContext context) {
     const backgroundGradient = LinearGradient(
-      colors: [
-        Color.fromARGB(255, 2, 9, 77),
-        Color.fromARGB(255, 8, 15, 99),
-      ],
+      colors: [Color.fromARGB(255, 2, 9, 77), Color.fromARGB(255, 8, 15, 99)],
       begin: Alignment.topCenter,
       end: Alignment.bottomCenter,
     );
@@ -92,9 +89,11 @@ class _ActivityScreenState extends State<ActivityScreen> {
 
                   return ListView.separated(
                     itemCount: historyDocs.length,
-                    separatorBuilder: (_, __) => const Divider(color: Colors.white24),
+                    separatorBuilder: (_, __) =>
+                        const Divider(color: Colors.white24),
                     itemBuilder: (context, index) {
-                      final data = historyDocs[index].data() as Map<String, dynamic>;
+                      final data =
+                          historyDocs[index].data() as Map<String, dynamic>;
 
                       final isAvailable = data['status'] == 'Available';
 
@@ -112,21 +111,30 @@ class _ActivityScreenState extends State<ActivityScreen> {
                               children: [
                                 Text(
                                   'Slot: ${data['slot']}',
-                                  style: const TextStyle(color: textColor, fontSize: 18),
+                                  style: const TextStyle(
+                                    color: textColor,
+                                    fontSize: 18,
+                                  ),
                                 ),
                                 const SizedBox(height: 4),
                                 Row(
                                   children: [
                                     Icon(
-                                      isAvailable ? Icons.check_circle : Icons.cancel,
-                                      color: isAvailable ? Colors.green : Colors.red,
+                                      isAvailable
+                                          ? Icons.check_circle
+                                          : Icons.cancel,
+                                      color: isAvailable
+                                          ? Colors.green
+                                          : Colors.red,
                                       size: 18,
                                     ),
                                     const SizedBox(width: 6),
                                     Text(
                                       data['status'],
                                       style: TextStyle(
-                                        color: isAvailable ? Colors.green : Colors.red,
+                                        color: isAvailable
+                                            ? Colors.green
+                                            : Colors.red,
                                         fontWeight: FontWeight.bold,
                                       ),
                                     ),
@@ -166,8 +174,14 @@ class _ActivityScreenState extends State<ActivityScreen> {
         onTap: _onNavBarTapped,
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(Icons.list_alt), label: 'Activity'),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'My Account'),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.list_alt),
+            label: 'Activity',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: 'My Account',
+          ),
         ],
       ),
     );
