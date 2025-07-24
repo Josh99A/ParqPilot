@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:parqpilot/FirstPage.dart';
-//import 'home_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
+import 'package:parqpilot/home_screen.dart';
 import 'my_account_screen.dart';
 
 class ActivityScreen extends StatefulWidget {
-  const ActivityScreen({super.key});
+  const ActivityScreen({Key? key}) : super(key: key);
 
   @override
   State<ActivityScreen> createState() => _ActivityScreenState();
@@ -12,12 +14,6 @@ class ActivityScreen extends StatefulWidget {
 
 class _ActivityScreenState extends State<ActivityScreen> {
   int _selectedIndex = 1;
-
-  final List<Map<String, String>> previousSlots = [
-     {'slot': 'A12', 'date': '2025-07-01', 'time': '10:00 AM - 11:00 AM', 'status': 'Occupied'},
-    {'slot': 'B07', 'date': '2025-06-30', 'time': '2:00 PM - 3:30 PM', 'status': 'Available'},
-    {'slot': 'C03', 'date': '2025-06-29', 'time': '9:00 AM - 10:15 AM', 'status': 'Occupied'},
-  ];
 
   void _onNavBarTapped(int index) {
     if (index == _selectedIndex) return;
@@ -29,7 +25,7 @@ class _ActivityScreenState extends State<ActivityScreen> {
     if (index == 0) {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const FirstPage()),
+        MaterialPageRoute(builder: (context) => const HomeScreen()),
       );
     } else if (index == 2) {
       Navigator.pushReplacement(
@@ -42,10 +38,7 @@ class _ActivityScreenState extends State<ActivityScreen> {
   @override
   Widget build(BuildContext context) {
     const backgroundGradient = LinearGradient(
-      colors: [
-        Color.fromARGB(255, 2, 9, 77),
-        Color.fromARGB(255, 8, 15, 99),
-      ],
+      colors: [Color.fromARGB(255, 2, 9, 77), Color.fromARGB(255, 8, 15, 99)],
       begin: Alignment.topCenter,
       end: Alignment.bottomCenter,
     );
@@ -71,57 +64,101 @@ class _ActivityScreenState extends State<ActivityScreen> {
             ),
             const SizedBox(height: 20),
             Expanded(
-              child: ListView.separated(
-                itemCount: previousSlots.length,
-                separatorBuilder: (_, __) => const Divider(color: Colors.white24),
-                itemBuilder: (context, index) {
-                  final slot = previousSlots[index];
-                  final isAvailable = slot['status'] == 'Available';
-                  return Container(
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: Colors.white12,
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+              child: StreamBuilder<QuerySnapshot>(
+                stream: FirebaseFirestore.instance
+                    .collection('users')
+                    .doc(FirebaseAuth.instance.currentUser!.uid)
+                    .collection('history')
+                    .orderBy('date', descending: true)
+                    .snapshots(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+
+                  if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                    return const Center(
+                      child: Text(
+                        'No parking history found.',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    );
+                  }
+
+                  final historyDocs = snapshot.data!.docs;
+
+                  return ListView.separated(
+                    itemCount: historyDocs.length,
+                    separatorBuilder: (_, __) =>
+                        const Divider(color: Colors.white24),
+                    itemBuilder: (context, index) {
+                      final data =
+                          historyDocs[index].data() as Map<String, dynamic>;
+
+                      final isAvailable = data['status'] == 'Available';
+
+                      return Container(
+                        padding: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          color: Colors.white12,
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(
-                              'Slot: ${slot['slot']}',
-                              style: const TextStyle(color: textColor, fontSize: 18),
-                            ),
-                            const SizedBox(height: 4),
-                            Row(
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Icon(
-                                  isAvailable ? Icons.check_circle : Icons.cancel,
-                                  color: isAvailable ? Colors.green : Colors.red,
-                                  size: 18,
-                                ),
-                                const SizedBox(width: 6),
                                 Text(
-                                  slot['status']!,
-                                  style: TextStyle(
-                                    color: isAvailable ? Colors.green : Colors.red,
-                                    fontWeight: FontWeight.bold,
+                                  'Slot: ${data['slot']}',
+                                  style: const TextStyle(
+                                    color: textColor,
+                                    fontSize: 18,
                                   ),
+                                ),
+                                const SizedBox(height: 4),
+                                Row(
+                                  children: [
+                                    Icon(
+                                      isAvailable
+                                          ? Icons.check_circle
+                                          : Icons.cancel,
+                                      color: isAvailable
+                                          ? Colors.green
+                                          : Colors.red,
+                                      size: 18,
+                                    ),
+                                    const SizedBox(width: 6),
+                                    Text(
+                                      data['status'],
+                                      style: TextStyle(
+                                        color: isAvailable
+                                            ? Colors.green
+                                            : Colors.red,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                Text(
+                                  data['date'],
+                                  style: const TextStyle(color: textColor),
+                                ),
+                                Text(
+                                  data['time'],
+                                  style: const TextStyle(color: textColor),
                                 ),
                               ],
                             ),
                           ],
                         ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            Text(slot['date']!, style: const TextStyle(color: textColor)),
-                            Text(slot['time']!, style: const TextStyle(color: textColor)),
-                          ],
-                        ),
-                      ],
-                    ),
+                      );
+                    },
                   );
                 },
               ),
@@ -137,8 +174,14 @@ class _ActivityScreenState extends State<ActivityScreen> {
         onTap: _onNavBarTapped,
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(Icons.list_alt), label: 'Activity'),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'My Account'),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.list_alt),
+            label: 'Activity',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: 'My Account',
+          ),
         ],
       ),
     );
