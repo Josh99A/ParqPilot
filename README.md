@@ -37,36 +37,36 @@ In many urban areas,drivers struggle to find open parking spaces,leading to time
 ## Technologies Used
 
 Hardware:  
-  - HC-SR04 Ultrasonic Sensors  
-  - ESP32-CAM Microcontroller  
-  - LED Lights  
-  - Potentiometer & Resistors  
-  - FTDI Programmer  
-  - Battery Power Supply  
+  -HC-SR04 Ultrasonic Sensors  
+  -ESP32-CAM Microcontroller  
+  -LED Lights  
+  -Potentiometer & Resistors  
+  -FTDI Programmer  
+  -Battery Power Supply  
 
 Software:  
-  - Arduino IDE (ESP32 firmware)  
-  - Firebase Realtime Database  
-  - HTML, CSS, JavaScript (dashboard)
+  -Arduino IDE (ESP32 firmware)  
+  -Firebase Realtime Database  
+  -HTML, CSS, JavaScript (dashboard)
 
----
+
 
 ## Setup Instructions
 
 ### Hardware Setup
-1. Connect HC-SR04 sensors to ESP32-CAM (use 5V, GND, TRIG, ECHO).
-2. Add LEDs with 200Ω resistors to display status.
-3. Power the ESP32 with a battery pack.
-4. Use an FTDI programmer to upload your code.
+1.Connect HC-SR04 sensors to ESP32-CAM (use 5V, GND, TRIG, ECHO).
+2.Add LEDs with 200Ω resistors to display status.
+3.Power the ESP32 with a battery pack.
+4.Use an FTDI programmer to upload your code.
 
 ###  Software Setup
-1. Install Arduino IDE and ESP32 board support.
-2. Upload the code to ESP32-CAM with Firebase credentials.
-3. Configure your Firebase database paths (e.g., `/parking/slot1`, etc.).
+1.Install Arduino IDE and ESP32 board support.
+2.Upload the code to ESP32-CAM with Firebase credentials.
+3.Configure your Firebase database paths (e.g., `/parking/slot1`, etc.).
 
 ###  Web Dashboard
-1. Clone or download the web interface files.
-2. Open `index.html` in your browser.
+1.Clone or download the web interface files.
+2.Open `index.html` in your browser.
 3. Make sure your Firebase config matches your own database.
 
 
@@ -75,7 +75,7 @@ Software:
 
 
 
- Real-time slot status on dashboard   
+Real-time slot status on dashboard   
 Firebase data showing occupied/free  
 Serial monitor showing sensor readings  
 Mobile & desktop views of the dashboard  
