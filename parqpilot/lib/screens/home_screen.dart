@@ -15,9 +15,10 @@ class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
 
   // ✅ Correctly point to the database in asia-southeast1 region
-  final FirebaseDatabase _database = FirebaseDatabase(
-    databaseURL: 'https://parqpilot-2c029-default-rtdb.asia-southeast1.firebasedatabase.app/',
-  );
+  final FirebaseDatabase _database = FirebaseDatabase.instance;
+  // (
+  //   databaseURL: 'https://parqpilot-2c029-default-rtdb.asia-southeast1.firebasedatabase.app/',
+  // );
 
   late final DatabaseReference _parkingRef;
 
@@ -106,7 +107,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     return const Center(child: Text('No valid data found.'));
                   }
 
-                  final data = Map<String, dynamic>.from(value as Map<dynamic, dynamic>);
+                  final data = Map<String, dynamic>.from(value);
                   final slots = data.entries
                       .where((e) => e.key.toString().startsWith('Slot'))
                       .toList();
@@ -124,7 +125,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       final slotDataRaw = slots[index].value;
 
                       final slotData = slotDataRaw is Map
-                          ? Map<String, dynamic>.from(slotDataRaw as Map<dynamic, dynamic>)
+                          ? Map<String, dynamic>.from(slotDataRaw)
                           : {};
 
                       String status = slotData['status']?.toString() ?? 'unknown';

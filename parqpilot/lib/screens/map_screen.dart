@@ -22,8 +22,8 @@ class _MapScreenState extends State<MapScreen> {
     "SlotA2": {"status": "free"},
   };
 
-  Set<Marker> _markers = {};
-  Set<Polyline> _polylines = {};
+  final Set<Marker> _markers = {};
+  final Set<Polyline> _polylines = {};
   Position? _currentPosition;
   bool _directionsShown = false;
 

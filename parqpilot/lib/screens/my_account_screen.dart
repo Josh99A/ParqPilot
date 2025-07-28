@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:parqpilot/home_screen.dart';
+import 'package:parqpilot/screens/home_screen.dart';
 import 'activity_screen.dart';
 import 'profile_screen.dart';
 import 'change_password_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class MyAccountScreen extends StatefulWidget {
-  const MyAccountScreen({Key? key}) : super(key: key);
+  const MyAccountScreen({super.key});
 
   @override
   State<MyAccountScreen> createState() => _MyAccountScreenState();
