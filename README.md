@@ -8,7 +8,7 @@ In many urban areas,drivers struggle to find open parking spaces,leading to time
 ## System Architecture
 [Ultrasonic Sensors (HC-SR04)]
 ↓
-[ESP32-CAM] -- Wi-Fi --> [Firebase Realtime Database] --> [Web Dashboard]
+[ESP32-CAM] -- Wi-Fi --> [Firebase Realtime Database] --> [App Dashboard]
 ↓
 [LED Indicators]
 
@@ -56,18 +56,13 @@ Software:
 ### Hardware Setup
 1.Connect HC-SR04 sensors to ESP32-CAM (use 5V, GND, TRIG, ECHO).
 2.Add LEDs with 200Ω resistors to display status.
-3.Power the ESP32 with a battery pack.
+3.Power the ESP32 with a laptop
 4.Use an FTDI programmer to upload your code.
 
 ###  Software Setup
 1.Install Arduino IDE and ESP32 board support.
 2.Upload the code to ESP32-CAM with Firebase credentials.
-3.Configure your Firebase database paths (e.g., `/parking/slot1`, etc.).
-
-###  Web Dashboard
-1.Clone or download the web interface files.
-2.Open `index.html` in your browser.
-3.Make sure your Firebase config matches your own database.
+3.Configure your Firebase database paths ().
 
 
 
@@ -76,7 +71,7 @@ Software:
 
 
 Real-time slot status on dashboard   
-Firebase data showing occupied/free  
+Firebase data showing occupied/free [ParqPilot/parqpilot/assets/databasescreenshot.jpg] 
 Serial monitor showing sensor readings  
 Mobile & desktop views of the dashboard  
 
