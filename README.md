@@ -17,7 +17,7 @@ In many urban areas,drivers struggle to find open parking spaces,leading to time
 
 ## Features
 
--Real-Time Slot Status: Shows live status of each slot (Green = Free, Red = Occupied).
+-Real-Time Slot Status: Shows live status of each slot (Green = Available, Red = Occupied).
 -LED Indicators: On-site visual indicators for each slot.
 -Firebase Integration: ESP32-CAM pushes data to Firebase database.
 -Responsive Web Dashboard: Viewable from phone, tablet, or desktop.
@@ -27,10 +27,10 @@ In many urban areas,drivers struggle to find open parking spaces,leading to time
 
 ## How It Works
 
-1. Ultrasonic sensors detect if a car is parked in a slot based on distance.
-2. ESP32-CAM processes the data and sends it to Firebase in real-time.
-3. The LED indicator turns red when a slot is occupied, green when free.
-4. The web dashboard fetches data from Firebase and updates automatically.
+1.Ultrasonic sensors detect if a car is parked in a slot based on distance.
+2.ESP32-CAM processes the data and sends it to Firebase in real-time.
+3.The LED indicator turns red when a slot is occupied, green when free.
+4.The web dashboard fetches data from Firebase and updates automatically.
 
 
 
@@ -67,7 +67,7 @@ Software:
 ###  Web Dashboard
 1.Clone or download the web interface files.
 2.Open `index.html` in your browser.
-3. Make sure your Firebase config matches your own database.
+3.Make sure your Firebase config matches your own database.
 
 
 
@@ -85,7 +85,7 @@ Mobile & desktop views of the dashboard
 ## Project Repository & Website
 
 [GitHub Repository](https://github.com/Josh99A/ParqPilot.git)  
-[Live Dashboard (if hosted)](https://your-link.vercel.app) *(Optional)*
+
 
 
 
@@ -94,4 +94,4 @@ Awule Joshua
 Komuhendo Vivian
 Kuteesa Mercylinah
 Birungi Jennifer
-Mwesigwa Daniel
+Mwesigwa Daniel Abraham
