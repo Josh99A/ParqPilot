@@ -37,30 +37,28 @@ class _MyAccountScreenState extends State<MyAccountScreen> {
     }
   }
 
+  // Updated WhatsApp launcher without canLaunchUrl, just try/catch
   Future<void> _launchWhatsApp() async {
     final whatsappNumber = "256707707827";
-    final whatsappUri = Uri.parse(
-        "intent://send?phone=$whatsappNumber&text=Hello#Intent;package=com.whatsapp;scheme=smsto;end");
+    final whatsappUri = Uri.parse("https://wa.me/$whatsappNumber?text=Hello");
 
-    if (await canLaunchUrl(whatsappUri)) {
+    try {
       await launchUrl(whatsappUri, mode: LaunchMode.externalApplication);
-    } else {
+    } catch (e) {
       _showWhatsAppWarning();
     }
   }
 
+  // Updated Email launcher without canLaunchUrl, just try/catch
   Future<void> _launchEmail() async {
+    final emailUri = Uri(
+      scheme: 'mailto',
+      path: 'kuteesa.mercylina10@gmail.com',
+      query: 'subject=${Uri.encodeQueryComponent('Support')}&body=${Uri.encodeQueryComponent('Hello')}',
+    );
+
     try {
-      final emailUri = Uri(
-        scheme: 'mailto',
-        path: 'kuteesa.mercylina10@gmail.com',
-        query: Uri.encodeFull('subject=Support&body=Hello'),
-      );
-      if (await canLaunchUrl(emailUri)) {
-        await launchUrl(emailUri, mode: LaunchMode.externalApplication);
-      } else {
-        _showEmailWarning();
-      }
+      await launchUrl(emailUri, mode: LaunchMode.externalApplication);
     } catch (e) {
       _showEmailWarning();
     }
