@@ -3,6 +3,8 @@ import 'package:firebase_database/firebase_database.dart';
 import 'activity_screen.dart';
 import 'my_account_screen.dart';
 import 'map_screen.dart';
+import 'package:flutter/foundation.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -14,11 +16,10 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
 
-  // ✅ Correctly point to the database in asia-southeast1 region
-  final FirebaseDatabase _database = FirebaseDatabase(
-    databaseURL: 'https://parqpilot-2c029-default-rtdb.asia-southeast1.firebasedatabase.app/',
+  final FirebaseDatabase _database = FirebaseDatabase.instanceFor(
+    app: Firebase.app(),
+    databaseURL: 'https://parqpilot-2c029-default-rtdb.asia-southeast1.firebasedatabase.app',
   );
-
   late final DatabaseReference _parkingRef;
 
   @override
@@ -91,46 +92,55 @@ class _HomeScreenState extends State<HomeScreen> {
               child: StreamBuilder<DatabaseEvent>(
                 stream: _parkingRef.onValue,
                 builder: (context, snapshot) {
-                  print('📡 Firebase snapshot: ${snapshot.data?.snapshot.value}');
-
                   if (snapshot.hasError) {
-                    return Center(child: Text('Error: ${snapshot.error}'));
+                    return const Center(child: Text('❌ Failed to load data'));
                   }
 
-                  if (!snapshot.hasData || snapshot.data!.snapshot.value == null) {
-                    return const Center(child: CircularProgressIndicator());
+                  final data = snapshot.data?.snapshot.value;
+
+                  if (kDebugMode) {
+                    print('📦 Data from Firebase: $data');
                   }
 
-                  final value = snapshot.data!.snapshot.value;
-                  if (value is! Map) {
-                    return const Center(child: Text('No valid data found.'));
+                  if (data == null || data is! Map) {
+                    return const Center(
+                      child: Text(
+                        '🚫 No parking slot data found.',
+                        style: TextStyle(color: Colors.white70, fontSize: 18),
+                      ),
+                    );
                   }
 
-                  final data = Map<String, dynamic>.from(value as Map<dynamic, dynamic>);
-                  final slots = data.entries
-                      .where((e) => e.key.toString().startsWith('Slot'))
-                      .toList();
+                  final slots = data.entries.toList();
 
                   if (slots.isEmpty) {
-                    return const Center(child: Text('No parking slots found.'));
+                    return const Center(
+                      child: Text(
+                        '🚘 No slots available in database.',
+                        style: TextStyle(color: Colors.white70, fontSize: 18),
+                      ),
+                    );
                   }
 
                   return ListView.builder(
                     padding: const EdgeInsets.symmetric(horizontal: 24),
-                    
                     itemCount: slots.length,
                     itemBuilder: (context, index) {
                       final slotKey = slots[index].key.toString();
-                      final slotDataRaw = slots[index].value;
+                      final slotValue = slots[index].value;
 
-                      final slotData = slotDataRaw is Map
-                          ? Map<String, dynamic>.from(slotDataRaw as Map<dynamic, dynamic>)
-                          : {};
+                      final slotData = (slotValue as Map).map(
+                        (key, value) => MapEntry(key.toString(), value),
+                      );
 
-                      String status = slotData['status']?.toString() ?? 'unknown';
+                      final status =
+                          slotData['status']?.toString().toLowerCase() ?? 'unknown';
+                      final lastUpdated = slotData['lastUpdated'] ?? 'N/A';
+                     // final lat = slotData['location']?['lat']?.toString() ?? 'N/A';
+                      //final lng = slotData['location']?['lng']?.toString() ?? 'N/A';
 
-                      // Fix typo if exists in Firebase
-                      if (status == 'occuppied') status = 'occupied';
+                      Color statusColor =
+                          status == 'free' ? Colors.green : Colors.red;
 
                       return Container(
                         margin: const EdgeInsets.only(bottom: 16),
@@ -139,21 +149,55 @@ class _HomeScreenState extends State<HomeScreen> {
                           color: Colors.white12,
                           borderRadius: BorderRadius.circular(16),
                         ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  slotKey,
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                Icon(
+                                  status == 'free'
+                                      ? Icons.local_parking
+                                      : Icons.block,
+                                  color: Colors.white,
+                                  size: 28,
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 8),
+                            Row(
+                              children: [
+                                Text(
+                                  'Status: ${status[0].toUpperCase()}${status.substring(1)}',
+                                  style: const TextStyle(color: Colors.white70),
+                                ),
+                                const SizedBox(width: 8),
+                                Container(
+                                  width: 12,
+                                  height: 12,
+                                  decoration: BoxDecoration(
+                                    color: statusColor,
+                                    shape: BoxShape.circle,
+                                  ),
+                                ),
+                              ],
+                            ),
                             Text(
-                              slotKey,
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 20,
-                              ),
+                              'Last Updated: $lastUpdated',
+                              style: const TextStyle(color: Colors.white70),
                             ),
-                            Icon(
-                              status == 'free' ? Icons.local_parking : Icons.block,
-                              color: Colors.white,
-                              size: 28,
-                            ),
+                           // Text(
+                             // 'Location: lat: $lat, lng: $lng',
+                              //style: const TextStyle(color: Colors.white70),
+                           // ),
                           ],
                         ),
                       );
