@@ -1,16 +1,92 @@
-# parqpilot
+# ParqPilot-Smart Parking System
+ParqPilot is a real-time smart parking system to help drivers quickly identify available and unavailable parking slots.combining ultrasonic sensors,ESP32-CAM microcontrollers  and Firebaseto deliver live slot updates on a web-based dashboard
 
-A new Flutter project.
 
-## Getting Started
+## Overview
+In many urban areas,drivers struggle to find open parking spaces,leading to time loss and traffic congestion .ParqPilot addresses this challenge by showing the availability of each parking slot in real-time through a visual dashboard and LED indicators on-site.The system is easy to install and scalable for different parking lot sizes.
 
-This project is a starting point for a Flutter application.
+## System Architecture
+[Ultrasonic Sensors (HC-SR04)]
+↓
+[ESP32-CAM] -- Wi-Fi --> [Firebase Realtime Database] --> [App Dashboard]
+↓
+[LED Indicators]
 
-A few resources to get you started if this is your first Flutter project:
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+
+## Features
+
+-Real-Time Slot Status: Shows live status of each slot (Green = Available, Red = Occupied).
+-LED Indicators: On-site visual indicators for each slot.
+-Firebase Integration: ESP32-CAM pushes data to Firebase database.
+-Responsive Web Dashboard: Viewable from phone, tablet, or desktop.
+-Wireless Communication: ESP32 connects over Wi-Fi without cables.
+-Battery Powered: No need for external power supply.
+
+
+## How It Works
+
+1.Ultrasonic sensors detect if a car is parked in a slot based on distance.
+2.ESP32-CAM processes the data and sends it to Firebase in real-time.
+3.The LED indicator turns red when a slot is occupied, green when free.
+4.The web dashboard fetches data from Firebase and updates automatically.
+
+
+
+## Technologies Used
+
+Hardware:  
+  -HC-SR04 Ultrasonic Sensors  
+  -ESP32-CAM Microcontroller  
+  -LED Lights  
+  -Potentiometer & Resistors  
+  -FTDI Programmer  
+  -Battery Power Supply  
+
+Software:  
+  -Arduino IDE (ESP32 firmware)  
+  -Firebase Realtime Database  
+  -HTML, CSS, JavaScript (dashboard)
+
+
+
+## Setup Instructions
+
+### Hardware Setup
+1.Connect HC-SR04 sensors to ESP32-CAM (use 5V, GND, TRIG, ECHO).
+2.Add LEDs with 200Ω resistors to display status.
+3.Power the ESP32 with a laptop
+4.Use an FTDI programmer to upload your code.
+
+###  Software Setup
+1.Install Arduino IDE and ESP32 board support.
+2.Upload the code to ESP32-CAM with Firebase credentials.
+3.Configure your Firebase database paths ().
+
+
+
+## Screenshots
+
+
+
+Real-time slot status on dashboard   
+Firebase data showing occupied/free [ParqPilot/parqpilot/assets/databasescreenshot.jpg] 
+Serial monitor showing sensor readings  
+Mobile & desktop views of the dashboard  
+
+
+
+## Project Repository & Website
+
+[GitHub Repository](https://github.com/Josh99A/ParqPilot.git)  
+
+
+
+
+## Contributors
+Awule Joshua 
+Komuhendo Vivian
+Kuteesa Mercylinah
+Birungi Jennifer
+Mwesigwa Daniel Abraham

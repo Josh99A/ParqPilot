@@ -1,10 +1,58 @@
 import 'package:flutter/material.dart';
-// 'package:parqpilot/change_password_screen.dart';
 import 'package:parqpilot/home_screen.dart';
+///import 'change_password_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
+class SignUpScreen extends StatefulWidget {
+  const SignUpScreen({Key? key}) : super(key: key);
 
-class SignUpScreen extends StatelessWidget {
-  const SignUpScreen({super.key});
+  @override
+  State<SignUpScreen> createState() => _SignUpScreenState();
+}
+
+class _SignUpScreenState extends State<SignUpScreen> {
+  final TextEditingController usernameController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+
+  Future<void> signUp() async {
+    try {
+      final auth = FirebaseAuth.instance;
+      final firestore = FirebaseFirestore.instance;
+
+      final UserCredential userCredential = await auth
+          .createUserWithEmailAndPassword(
+            email: emailController.text.trim(),
+            password: passwordController.text.trim(),
+          );
+
+      final uid = userCredential.user!.uid;
+
+      await firestore.collection('users').doc(uid).set({
+        'username': usernameController.text.trim(),
+        'email': emailController.text.trim(),
+        'createdAt': Timestamp.now(),
+      });
+
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const HomeScreen()),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Signup failed: ${e.toString()}')));
+    }
+  }
+
+  @override
+  void dispose() {
+    usernameController.dispose();
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -14,124 +62,100 @@ class SignUpScreen extends StatelessWidget {
         height: double.infinity,
         decoration: const BoxDecoration(
           gradient: LinearGradient(
-            colors: [
-              Color.fromARGB(255, 2, 9, 77),
-              Color.fromARGB(255, 15, 49, 243),
-            ],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
+            colors: [Color(0xFF004e92), Color(0xFF000428)],
+            begin: Alignment.topRight,
+            end: Alignment.bottomLeft,
           ),
         ),
-        padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 20),
-        child: Stack(
-           children: [
-            
-            SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const SizedBox(height: 60),
-                  const Center(
-                    child: Text(
-                      "SIGN UP",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 50,
-                        fontWeight: FontWeight.bold,
-                        shadows: [
-                          Shadow(
-                            color: Colors.black54,
-                            offset: Offset(2, 2),
-                            blurRadius: 4,
-                          ),
-                        ],
-                      ),
-                    ),
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 48),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(height: 40),
+              const Text(
+                "Create Account",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 48,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 40),
+              const Text("Username:", style: TextStyle(color: Colors.white)),
+              const SizedBox(height: 8),
+              TextField(
+                controller: usernameController,
+                style: const TextStyle(color: Colors.white),
+                decoration: InputDecoration(
+                  filled: true,
+                  fillColor: Colors.white24,
+                  hintText: 'Enter username',
+                  hintStyle: const TextStyle(color: Colors.white54),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
                   ),
-                  const SizedBox(height: 40),
-                  Center(
-                    child: Image.asset(
-                      'assets/car2.png.png',
-                      height: 160,
-                      width: 300,
-                      fit: BoxFit.cover,
-                    ),
+                ),
+              ),
+              const SizedBox(height: 16),
+              const Text("Email:", style: TextStyle(color: Colors.white)),
+              const SizedBox(height: 8),
+              TextField(
+                controller: emailController,
+                style: const TextStyle(color: Colors.white),
+                decoration: InputDecoration(
+                  filled: true,
+                  fillColor: Colors.white24,
+                  hintText: 'Enter email',
+                  hintStyle: const TextStyle(color: Colors.white54),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
                   ),
-                  const SizedBox(height: 30),
-                  const Text("Email:", style: TextStyle(color: Colors.white)),
-                  const SizedBox(height: 6),
-                  TextField(
-                    style: const TextStyle(color: Colors.white),
-                    decoration: InputDecoration(
-                      filled: true,
-                      fillColor: Colors.white24,
-                      hintText: 'Enter your email',
-                      hintStyle: const TextStyle(color: Colors.white54),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                    ),
+                ),
+              ),
+              const SizedBox(height: 16),
+              const Text("Password:", style: TextStyle(color: Colors.white)),
+              const SizedBox(height: 8),
+              TextField(
+                controller: passwordController,
+                obscureText: true,
+                style: const TextStyle(color: Colors.white),
+                decoration: InputDecoration(
+                  filled: true,
+                  fillColor: Colors.white24,
+                  hintText: 'Enter password',
+                  hintStyle: const TextStyle(color: Colors.white54),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
                   ),
-                  const SizedBox(height: 12),
-                  const Text("Password:", style: TextStyle(color: Colors.white)),
-                  const SizedBox(height: 6),
-                  TextField(
-                    obscureText: true,
-                    style: const TextStyle(color: Colors.white),
-                    decoration: InputDecoration(
-                      filled: true,
-                      fillColor: Colors.white24,
-                      hintText: 'Enter password',
-                      hintStyle: const TextStyle(color: Colors.white54),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
+                ),
+              ),
+              const SizedBox(height: 30),
+              Center(
+                child: GestureDetector(
+                  onTap: signUp,
+                  child: Container(
+                    height: 48,
+                    width: 160,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(24),
                     ),
-                  ),
-                  const SizedBox(height: 12),
-                  const Text("Confirm Password:",
-                      style: TextStyle(color: Colors.white)),
-                  const SizedBox(height: 6),
-                  TextField(
-                    obscureText: true,
-                    style: const TextStyle(color: Colors.white),
-                    decoration: InputDecoration(
-                      filled: true,
-                      fillColor: Colors.white24,
-                      hintText: 'Confirm password',
-                      hintStyle: const TextStyle(color: Colors.white54),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  Center(
-                    child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const HomeScreen()), // ✅ Go to Home
-                        );
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.white,
-                        foregroundColor:
-                            const Color.fromARGB(255, 21, 35, 240),
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 40, vertical: 14),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(24),
+                    child: const Center(
+                      child: Text(
+                        "Continue",
+                        style: TextStyle(
+                          color: Colors.blue,
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
-                      child: const Text("Sign Up"),
                     ),
                   ),
-                ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

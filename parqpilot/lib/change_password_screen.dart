@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'my_account_screen.dart'; // Ensure this import matches your actual file name
 
 class ChangePasswordScreen extends StatefulWidget {
-  const ChangePasswordScreen({super.key});
+  const ChangePasswordScreen({Key? key}) : super(key: key);
 
   @override
   State<ChangePasswordScreen> createState() => _ChangePasswordScreenState();
