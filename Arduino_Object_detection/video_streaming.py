@@ -3,7 +3,7 @@ import urllib.request
 import numpy as np
  
 # Replace the URL with the IP camera's stream URL
-url = 'http://10.253.237.140/cam-hi.jpg'
+url = 'http://10.10.134.42/cam-hi.jpg'
 cv2.namedWindow("live Cam Testing", cv2.WINDOW_AUTOSIZE)
  
  
